@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block extra_css %}
+<style>
+.input-restricted { background:#fff; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Registration</h1>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label for="name">Name (Letters only)</label>
+    <input type="text" id="name" name="name" value="{{ name }}" class="input-restricted" required placeholder="Enter your name (letters only)">
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" value="{{ email }}" required placeholder="Enter email">
+  </div>
+
+  <div class="form-group">
+    <label for="phone">Phone (Numbers only)</label>
+    <input type="text" id="phone" name="phone" value="{{ phone }}" class="input-restricted" required placeholder="Enter phone number (numbers only)">
+  </div>
+
+  <div class="form-group">
+    <label for="address">Address</label>
+    <textarea id="address" name="address" rows="3" required placeholder="Enter address">{{ address }}</textarea>
+  </div>
+
+  {% if not otp_sent %}
+    <button type="submit" name="action" value="send_otp">Send OTP</button>
+  {% else %}
+    <div class="card">
+      <h3>Verify Email & Phone</h3>
+      <p>OTPs have been sent to terminal. Enter both OTPs below to complete registration.</p>
+    </div>
+
+    <input type="hidden" name="user_id" value="{{ user_id }}">
+
+    <div class="form-group">
+      <label for="email_otp">Email OTP (6 digits)</label>
+      <input type="text" id="email_otp" name="email_otp" pattern="[0-9]{6}" maxlength="6" required placeholder="123456">
+    </div>
+
+    <div class="form-group">
+      <label for="phone_otp">Phone OTP (6 digits)</label>
+      <input type="text" id="phone_otp" name="phone_otp" pattern="[0-9]{6}" maxlength="6" required placeholder="123456">
+    </div>
+
+    <button type="submit" name="action" value="register">Complete Registration</button>
+  {% endif %}
+
+  <div class="nav-links">
+    <p>Already registered? <a href="{% url 'login_view' %}">Login here</a></p>
+    {% if otp_sent %}
+      <a href="{% url 'register' %}">Start over</a>
+    {% endif %}
+  </div>
+</form>
+
+<script>
+// Restrict name input to letters and spaces only
+document.getElementById('name').addEventListener('input', function() {
+  this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+});
+
+// Restrict phone input to numbers only
+document.getElementById('phone').addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '');
+});
+</script>
+{% endblock %}

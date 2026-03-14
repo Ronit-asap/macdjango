@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Registration Success{% endblock %}
+
+{% block content %}
+<h1>Registration Completed!</h1>
+
+<div class="card" style="border-left-color:#16a34a;background:#dcfce7;">
+  <h3>✓ You have been registered successfully</h3>
+  
+  {% if registration_number %}
+    <p><strong>Registration Number:</strong><br>
+    <code style="background:white;padding:8px 12px;border-radius:4px;display:inline-block;margin-top:4px;font-family:monospace;font-size:16px;letter-spacing:2px;">{{ registration_number }}</code></p>
+  {% endif %}
+
+  {% if temp_username %}
+    <p style="margin-top:12px;"><strong>Temporary Username:</strong><br>
+    <code style="background:white;padding:8px 12px;border-radius:4px;display:inline-block;margin-top:4px;font-family:monospace;">{{ temp_username }}</code></p>
+  {% endif %}
+
+  {% if temp_password %}
+    <p style="margin-top:12px;"><strong>Temporary Password:</strong><br>
+    <code style="background:white;padding:8px 12px;border-radius:4px;display:inline-block;margin-top:4px;font-family:monospace;">{{ temp_password }}</code></p>
+  {% endif %}
+
+  <p style="margin-top:12px;color:#15803d;"><strong>You can login immediately using the temporary credentials above.</strong></p>
+  <p style="margin-top:8px;color:#15803d;">After login, you can change your username and password from the dashboard.</p>
+</div>
+
+<div class="nav-links" style="margin-top:20px;">
+  <a href="{% url 'login_view' %}" style="display:inline-block;padding:10px 20px;background:#2563eb;color:white;border-radius:6px;text-decoration:none;margin-right:10px;">Login Now</a>
+  <a href="{% url 'register' %}" style="display:inline-block;padding:10px 20px;background:#6b7280;color:white;border-radius:6px;text-decoration:none;">Register Another Account</a>
+</div>
+{% endblock %}

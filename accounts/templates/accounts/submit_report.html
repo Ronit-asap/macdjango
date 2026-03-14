@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Submit Report{% endblock %}
+
+{% block content %}
+<h1>Submit Report</h1>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label for="report_date">Report Date</label>
+    <input type="date" id="report_date" name="report_date" value="{{ today }}" required>
+  </div>
+
+  <div class="form-group">
+    <label for="amount">Amount</label>
+    <input type="number" id="amount" name="amount" step="0.01" required placeholder="Enter amount">
+  </div>
+
+  <div class="form-group">
+    <label for="bank_number">Bank Account Number</label>
+    <input type="text" id="bank_number" name="bank_number" required placeholder="Enter bank account number">
+  </div>
+
+  <div class="form-group">
+    <label for="ifsc_code">IFSC Code</label>
+    <input type="text" id="ifsc_code" name="ifsc_code" required placeholder="Enter IFSC code (e.g., ABCD0123456)">
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description (Optional)</label>
+    <textarea id="description" name="description" rows="3" placeholder="Enter description"></textarea>
+  </div>
+
+  <button type="submit">Submit Report</button>
+
+  <div class="nav-links" style="margin-top:16px;">
+    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+  </div>
+</form>
+{% endblock %}

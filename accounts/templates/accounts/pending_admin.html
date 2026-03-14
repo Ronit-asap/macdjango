@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Pending Approval{% endblock %}
+
+{% block content %}
+<h1>Pending Admin Approval</h1>
+
+<div class="card" style="border-left-color:#f59e0b;background:#fef3c7;">
+  <h3>⏳ Your account is under review</h3>
+  <p>An admin will verify your details and approve your account shortly.</p>
+  <p><strong>Registration Number:</strong> <code>{{ user.registration_number }}</code></p>
+</div>
+
+<div class="nav-links" style="margin-top:16px;">
+  <button onclick="location.reload()">Refresh Status</button>
+  <a href="{% url 'login_view' %}">Try Login</a>
+</div>
+{% endblock %}

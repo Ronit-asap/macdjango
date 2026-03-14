@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.section { border:1px solid #e5e7eb; padding:16px; border-radius:8px; background:white; }
+.section h3 { margin:0 0 12px 0; color:#1f2937; border-bottom:2px solid #2563eb; padding-bottom:8px; }
+.btn-group { display:flex; gap:10px; flex-wrap:wrap; }
+.btn-group button { flex:1; min-width:140px; }
+.btn-secondary { background:#6b7280; }
+.btn-secondary:hover { background:#4b5563; }
+.btn-danger { background:#dc2626; }
+.btn-danger:hover { background:#b91c1c; }
+.form-section { border:1px solid #d1d5db; padding:12px; border-radius:6px; background:#f9fafb; margin-top:12px; display:none; }
+.form-section.show { display:block; }
+.user-info { background:#eff6ff; border-left:4px solid #2563eb; padding:12px; border-radius:6px; margin-bottom:16px; }
+.user-info p { margin:6px 0; }
+table { width:100%; border-collapse:collapse; margin-top:12px; font-size:14px; }
+table th, table td { padding:8px; text-align:left; border-bottom:1px solid #e5e7eb; }
+table th { background:#f3f4f6; font-weight:600; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ user.username }}!</h1>
+
+<div class="user-info">
+  <p><strong>Name:</strong> {{ user.first_name }}</p>
+  <p><strong>Email:</strong> {{ user.email }} {% if user.email_verified %}<span style="color:#16a34a;">✓</span>{% endif %}</p>
+  <p><strong>Phone:</strong> {{ user.phone }} {% if user.phone_verified %}<span style="color:#16a34a;">✓</span>{% endif %}</p>
+  <p><strong>Address:</strong> {{ user.address }}</p>
+</div>
+
+<!-- CHANGE USERNAME/PASSWORD -->
+<div class="section">
+  <h3>Account Settings</h3>
+  <div class="btn-group">
+    <button type="button" onclick="toggleForm('changeUsername')" style="background:#2563eb;">Change Username</button>
+    <button type="button" onclick="toggleForm('changePassword')" style="background:#2563eb;">Change Password</button>
+  </div>
+
+  <div id="changeUsername" class="form-section">
+    <h4>Change Username</h4>
+    <form method="post" action="{% url 'change_username' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>New Username (letters only)</label>
+        <input type="text" name="new_username" pattern="[a-zA-Z]+" required>
+      </div>
+      <button type="submit" style="background:#2563eb;">Update Username</button>
+    </form>
+  </div>
+
+  <div id="changePassword" class="form-section">
+    <h4>Change Password</h4>
+    <form method="post" action="{% url 'change_password' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>Old Password</label>
+        <input type="password" name="old_password" required>
+      </div>
+      <div class="form-group">
+        <label>New Password</label>
+        <input type="password" name="new_password1" required>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" name="new_password2" required>
+      </div>
+      <button type="submit" style="background:#2563eb;">Update Password</button>
+    </form>
+  </div>
+</div>
+
+<!-- CHANGE EMAIL/PHONE/ADDRESS -->
+<div class="section">
+  <h3>Contact Information</h3>
+  <div class="btn-group">
+    <button type="button" onclick="toggleForm('changeEmail')" style="background:#2563eb;">Change Email</button>
+    <button type="button" onclick="toggleForm('changePhone')" style="background:#2563eb;">Change Phone</button>
+    <button type="button" onclick="toggleForm('changeAddress')" style="background:#2563eb;">Change Address</button>
+  </div>
+
+  <div id="changeEmail" class="form-section">
+    <h4>Change Email (OTP Required)</h4>
+    <form method="post" action="{% url 'change_email' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>New Email</label>
+        <input type="email" name="new_email" required>
+      </div>
+      <button type="submit" name="action" value="send_otp" style="background:#2563eb;">Send OTP</button>
+    </form>
+  </div>
+
+  <div id="changePhone" class="form-section">
+    <h4>Change Phone (OTP Required)</h4>
+    <form method="post" action="{% url 'change_phone' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>New Phone (numbers only)</label>
+        <input type="tel" name="new_phone" pattern="[0-9]+" required>
+      </div>
+      <button type="submit" name="action" value="send_otp" style="background:#2563eb;">Send OTP</button>
+    </form>
+  </div>
+
+  <div id="changeAddress" class="form-section">
+    <h4>Change Address</h4>
+    <form method="post" action="{% url 'change_address' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>New Address</label>
+        <textarea name="new_address" rows="3" required>{{ user.address }}</textarea>
+      </div>
+      <button type="submit" style="background:#2563eb;">Update Address</button>
+    </form>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div class="section">
+  <h3>Reports</h3>
+  <div class="btn-group">
+    <button type="button" onclick="location.href='{% url 'submit_report' %}'" style="background:#2563eb;">Submit Report</button>
+    <button type="button" onclick="location.href='{% url 'my_reports' %}'" style="background:#2563eb;">View My Reports</button>
+  </div>
+</div>
+
+<!-- LOGOUT -->
+<div class="section">
+  <h3>Session</h3>
+  <button onclick="location.href='{% url 'logout_view' %}'" class="btn-danger">Logout</button>
+</div>
+
+<script>
+function toggleForm(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+</script>
+{% endblock %}

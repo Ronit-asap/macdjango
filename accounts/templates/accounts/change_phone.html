@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Change Phone{% endblock %}
+
+{% block content %}
+<h1>Change Phone Number</h1>
+
+<form method="post">
+  {% csrf_token %}
+
+  {% if not otp_sent %}
+    <div class="form-group">
+      <label for="new_phone">New Phone (numbers only)</label>
+      <input type="tel" id="new_phone" name="new_phone" pattern="[0-9]+" required placeholder="Enter new phone number">
+    </div>
+    <button type="submit" name="action" value="send_otp">Send OTP</button>
+  {% else %}
+    <div class="card">
+      <h3>Verify Phone OTP</h3>
+      <p>OTP sent to terminal. Enter it below.</p>
+    </div>
+    <div class="form-group">
+      <label for="otp">Phone OTP (6 digits)</label>
+      <input type="text" id="otp" name="otp" pattern="[0-9]{6}" maxlength="6" required placeholder="123456">
+    </div>
+    <button type="submit" name="action" value="verify">Verify & Update Phone</button>
+  {% endif %}
+
+  <div class="nav-links" style="margin-top:16px;">
+    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+  </div>
+</form>
+{% endblock %}

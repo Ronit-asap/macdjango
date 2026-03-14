@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Change Address{% endblock %}
+
+{% block content %}
+<h1>Change Address</h1>
+
+<form method="post">
+  {% csrf_token %}
+
+  <div class="form-group">
+    <label for="new_address">New Address</label>
+    <textarea id="new_address" name="new_address" rows="4" required placeholder="Enter new address"></textarea>
+  </div>
+
+  <button type="submit">Update Address</button>
+
+  <div class="nav-links" style="margin-top:16px;">
+    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+  </div>
+</form>
+{% endblock %}
